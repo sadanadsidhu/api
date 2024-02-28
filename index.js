@@ -8,7 +8,7 @@ const app = express();
 mongoose
   .connect(process.env.MONGODB_URL)
   .then(() => console.log("Database Connected"))
-  .catch((err) => console.log("Database is connected"));
+  .catch((err) => console.log("Database is not working"));
 
 app.use(express.json());
 app.use("/", require("./routes/authRoutes"));

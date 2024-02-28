@@ -12,13 +12,13 @@ const nodemailerTransporter = nodemailer.createTransport({
 
 const registerUser = async (req, res) => {
   try {
-    const { username, email, password, role } = req.body;
+    const { userName, email, conformPassword, role } = req.body;
     // Check if name was entered
-    if (!username) {
+    if (!userName) {
       return res.status(400).json({ error: "Name is required" });
     }
     // Check password
-    if (!password || password.length < 6) {
+    if (!conformPassword || conformPassword.length < 6) {
       return res
         .status(400)
         .json({
@@ -32,11 +32,11 @@ const registerUser = async (req, res) => {
         .status(400)
         .json({ error: "Email already exists. Please try a new email" });
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedconformPassword = await bcrypt.hash(conformPassword, 10);
     const user = await User.create({
-      username,
+      userName,
       email,
-      password: hashedPassword,
+      password: conformPassword,
       role,
     });
     return res.json(user);
@@ -81,40 +81,7 @@ const login = async (req, res) => {
   }
 };
 
-// const resetPassword = async (req, res) => {
-//   const {email}=req.body;
-//   try{
-//     const user=await User.findOne({email})
-//     if(!user){      
-//       return res.json({message:"user not regester"})
-//     }
 
-//     var transporter = nodemailer.createTransport({
-//       service: 'gmail',
-//       auth: {
-//         user: 'sadanandsidhu@gmail.com',
-//         pass: 'yihp jeys xaqk ajcj'
-//       }
-//     });
-    
-//     var mailOptions = {
-//       from: 'sadanandsidhu@gmail.com',
-//       to: email,
-//             subject: 'Sending Email using Node.js',
-//       text: `http://localhost:5173/resetPasword/${token}`
-//     };
-    
-//     transporter.sendMail(mailOptions, function(error, info){
-//       if (error) {
-//         console.log(error);
-//       } else {
-//         console.log('Email sent: ' + info.response);
-//       }
-//     });
-//   }catch(err){
-//     console.log(err)
-//   }
-// };
 
 const resetPassword = async (req, res) => {
   const { email } = req.body;

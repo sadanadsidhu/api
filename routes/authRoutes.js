@@ -12,14 +12,11 @@ router.use(
   })
 );
 
-// router.get('/', test);
+
 
 router.post('/register', registerUser);
 router.post('/login', login);
 router.post('/reset-password', resetPassword);
 router.post('/set-password', setPassword);
-
-// router.post("/register", registerUser);
-// router.post("/login", login);
 
 module.exports = router;
