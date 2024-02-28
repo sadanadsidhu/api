@@ -11,6 +11,8 @@ router.put('/item/:id', adminController.updateItem);
 // API endpoint for deleting an item
 router.delete('/item/:id', adminController.deleteItem);
 
+router.get('/item', adminController.getAllItems);
+
 module.exports = router;
 
 
