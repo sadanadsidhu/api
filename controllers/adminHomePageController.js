@@ -57,11 +57,22 @@ const deleteItem = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+//////get all item
+const getAllItems = async (req, res) => {
+  try {
+    const allItems = await Admin.find();
+    res.json(allItems);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 module.exports = {
   createItem,
   updateItem,
-  deleteItem
+  deleteItem,
+  getAllItems
 };
 
 
