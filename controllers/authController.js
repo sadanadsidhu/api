@@ -81,14 +81,76 @@ const login = async (req, res) => {
   }
 };
 
+// const resetPassword = async (req, res) => {
+//   const {email}=req.body;
+//   try{
+//     const user=await User.findOne({email})
+//     if(!user){      
+//       return res.json({message:"user not regester"})
+//     }
+
+//     var transporter = nodemailer.createTransport({
+//       service: 'gmail',
+//       auth: {
+//         user: 'sadanandsidhu@gmail.com',
+//         pass: 'yihp jeys xaqk ajcj'
+//       }
+//     });
+    
+//     var mailOptions = {
+//       from: 'sadanandsidhu@gmail.com',
+//       to: email,
+//             subject: 'Sending Email using Node.js',
+//       text: `http://localhost:5173/resetPasword/${token}`
+//     };
+    
+//     transporter.sendMail(mailOptions, function(error, info){
+//       if (error) {
+//         console.log(error);
+//       } else {
+//         console.log('Email sent: ' + info.response);
+//       }
+//     });
+//   }catch(err){
+//     console.log(err)
+//   }
+// };
+
 const resetPassword = async (req, res) => {
-  // const {email}=req.body;
-  // try{
-  //   const user=await User.findOne({email})
-  //   if(!user){
-  //     return res.status
-  //   }
-  // }
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({ message: "User not registered" });
+    }
+
+    // Generate reset password token
+    const resetToken = jwt.sign({ userId: user._id }, jwtSecretKey, {
+      expiresIn: "1h",
+    });
+
+    // Send email with reset password link including the token
+    const resetLink = `http://127.0.0.1:587/resetPassword/${resetToken}`; // Update the URL with your actual reset password endpoint
+    const mailOptions = {
+      from: "sadanandsidhu@gmail.com",
+      to: email,
+      subject: "Reset Password",
+      text: `Please click on the following link to reset your password: ${resetLink}`,
+    };
+    
+    nodemailerTransporter.sendMail(mailOptions, function(error, info) {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Error sending email" });
+      } else {
+        console.log('Email sent: ' + info.response);
+        return res.json({ message: "Reset password link sent to your email" });
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 const setPassword = async (req, res) => {

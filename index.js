@@ -12,6 +12,8 @@ mongoose
 
 app.use(express.json());
 app.use("/", require("./routes/authRoutes"));
+app.use('/', require("./routes/adminHomePageRoutes"));
+
 
 const port = 2124;
 app.listen(port, () => console.log(`Server is running on port ${port}`));
