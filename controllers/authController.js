@@ -36,7 +36,7 @@ const registerUser = async (req, res) => {
     const user = await User.create({
       userName,
       email,
-      password: conformPassword,
+      conformPassword: hashedconformPassword,
       role,
     });
     return res.json(user);
