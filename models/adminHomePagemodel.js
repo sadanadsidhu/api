@@ -17,10 +17,10 @@ const adminSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    // Image: {
-    //     type: String, // Assuming you'll store image URLs in the database
-    //     required: false,
-    // },
+    Image: {
+        type: String, // Assuming you'll store image URLs in the database
+        required: true,
+    },
     Stock: {
         type: Number,
         required: true
