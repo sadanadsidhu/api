@@ -1,10 +1,10 @@
 const Admin = require('../models/adminHomePagemodel');
-
+const multer = require('multer');
 // Create item
 const createItem = async (req, res) => {
     try {
         // Extract item details from the request body
-        const { Item_Name, Brand_Name, Category, MRP,Stock, Shop } = req.body;
+        const { Item_Name, Brand_Name, Category, MRP,Image,Stock, Shop } = req.body;
     
         // Create a new item object using the Admin model
         const newItem = new Admin({
@@ -12,10 +12,24 @@ const createItem = async (req, res) => {
           Brand_Name,
           Category,
           MRP,
+          Image,
           Stock,
           Shop
         });
-    
+        const storage = multer.diskStorage({
+          destination: function (req, file, cb) {
+            cb(null, 'uploads/'); // Specify the destination directory where uploaded files will be stored
+          },
+          filename: function (req, file, cb) {
+            cb(null, Date.now() + '-' + file.originalname); // Specify the file name
+          }
+        });
+        if (req.file) {
+          // Save the filename to the database
+          newItem.Image = req.file.filename;
+        }
+        // Initialize Multer upload
+        const upload = multer({ storage: storage });
         // Save the new item to the database
         const savedItem = await newItem.save();
     
